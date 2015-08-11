@@ -1,0 +1,26 @@
+{% extends "template/base.html" %}
+{% block content %}
+Hello, World
+<table>
+    <thead>
+    <tr>
+        <th>Account</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for trx in trxData %}
+    <tr>
+        <td>{{trx.account}}</td>
+        <td>{{trx.date}}</td>
+        <td>{{trx.desc}}</td>
+        <td>{{trx.amount}}</td>
+        <td>{{trx.category}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
