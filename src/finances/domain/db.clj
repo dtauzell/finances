@@ -1,5 +1,5 @@
 (ns finances.domain.db
-  (:require [finances.trx.types]
+  (:require [finances.trx.types :as types]
             [clojure.data.csv :as csv]
             [clojure.java.io :as io])
   (:import (finances.trx.types Transaction)))
@@ -19,7 +19,7 @@
 (defn bulkImport
   "bulk import a sequence of Transaction records, returns the new db"
   [records]
-  (reset! db (into @db records))
+  (reset! db (sort types/compareByDate (into @db records)))
   allTrx
   )
 

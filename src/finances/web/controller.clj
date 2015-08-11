@@ -1,5 +1,6 @@
 (ns finances.web.controller
   (:require [ring.util.response :refer [redirect file-response]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]]
             [finances.trx.types]
             [finances.domain.db :as db]
             [finances.domain.parser :as parser]
@@ -8,11 +9,13 @@
   (:import [java.io File FileInputStream FileOutputStream]))
 (use 'selmer.parser)
 
+(selmer.parser/add-tag! :csrf-field (fn [_ _] (anti-forgery-field)))
+
 (defn index
   "Handles the home page"
   [req]
   (render-file "template/index.html" {
-                                      :trxData db/allTrx
+                                      :trxData (db/allTrx)
                                       })
   )
 

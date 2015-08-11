@@ -1,7 +1,8 @@
 (ns finances.domain.parser
   (:require [finances.trx.types]
             [clojure.data.csv :as csv]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io])
+  (:import (finances.trx.types Transaction)))
 
 (defn- load-bank-trx
   "Loads a csv of bank transactions. Only supports Discover for now"
