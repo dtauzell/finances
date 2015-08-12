@@ -9,8 +9,8 @@
 (defroutes app-routes
            (GET "/" [] index)
            (GET "/upload" [] upload_form)
-           (POST "/upload" [file]
-             (upload-file file)
+           (POST "/upload" {params :params}
+             (upload-file params)
              (redirect "/"))
            (route/not-found "Not Found"))
 

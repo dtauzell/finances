@@ -26,9 +26,9 @@
   )
 
 
-
 (defn upload-file
   "parses a data file and loads it into the database"
-  [{:keys [tempfile]}]
-  (db/bulkImport (parser/parse_bank_file "discover" tempfile)))
+  [params]
+  (println (str "Params: " params))
+  (db/bulkImport (parser/parse_bank_file (:account params) (:tempfile (:file params)))))
 
