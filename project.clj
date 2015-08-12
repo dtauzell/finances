@@ -7,6 +7,7 @@
                  [compojure "1.3.1"]
                  [ring/ring-defaults "0.1.2"]
                  [selmer "0.8.7"]
+                 [clj-time "0.10.0"]
                  ]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler finances.web.handler/app}

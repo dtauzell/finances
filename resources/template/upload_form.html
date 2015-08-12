@@ -3,6 +3,12 @@
 <h2>Upload Discover Data</h2>
 <form action="/upload" enctype="multipart/form-data" method="POST">
     {% csrf-field %}
+    <select name="account">
+        <option value="discover">Discover</option>
+        <option value="usaa">USAA</option>
+        <option value="sunset">Sunset</option>
+        <option value="target">Target</option>
+    </select>
     <input id="file" name="file" type="file"/>
     <input type="submit" value="upload"/>
 </form>

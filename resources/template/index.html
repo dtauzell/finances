@@ -1,6 +1,5 @@
 {% extends "template/base.html" %}
 {% block content %}
-Hello, World
 <table>
     <thead>
     <tr>
@@ -15,7 +14,7 @@ Hello, World
     {% for trx in trxData %}
     <tr>
         <td>{{trx.account}}</td>
-        <td>{{trx.date}}</td>
+        <td>{{trx.date|date:mediumDate}}</td>
         <td>{{trx.desc}}</td>
         <td>{{trx.amount}}</td>
         <td>{{trx.category}}</td>

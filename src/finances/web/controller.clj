@@ -29,6 +29,6 @@
 
 (defn upload-file
   "parses a data file and loads it into the database"
-  [{:keys [tempfile size filename]}]
-  (db/bulkImport (parser/parse_discover_file tempfile)))
+  [{:keys [tempfile]}]
+  (db/bulkImport (parser/parse_bank_file "discover" tempfile)))
 
