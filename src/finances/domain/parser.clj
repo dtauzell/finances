@@ -25,6 +25,15 @@
   (if str (clojure.string/trim str) "")
   )
 
+(defn- str_to_amount
+  "converts a string to an integer, or 0 if it is blank or null"
+  [s multiplier]
+  (* multiplier
+     (if (clojure.string/blank? s)
+       0
+       (Float/parseFloat s)))
+  )
+
 (defn- parseDiscoverDate
   "parses a date, or returns null if the date is empty or null"
   [str]
@@ -35,14 +44,27 @@
 
 (defn- map_discover
   "maps a row from discover card csv download"
-  [row]
+  [[date, postDate, desc, amount, category]]
   (Transaction.
     "discover"
-    (parseDiscoverDate (get row 0))
-    (clean_string (get row 2))
-    (clean_string (get row 3))
+    (parseDiscoverDate date)
+    (clean_string desc)
+    (str_to_amount amount -1)
+    nil
     nil
     )
+  )
+
+(defn- map_sunset
+  "maps a row from a sunset csv download"
+  [[accountNum, checkNum, debt, payment, balance, date, desc, extra2]]
+  (Transaction.
+    "sunset"
+    (parseDiscoverDate date)
+    (clean_string desc)
+    (if (clojure.string/blank? payment) (str_to_amount debt -1) (str_to_amount payment 1))
+    nil,
+    checkNum)
   )
 
 (defn parse_discover_file
@@ -50,10 +72,15 @@
   [filePath]
   (map map_discover (rest (load-bank-trx filePath))))
 
-(def parser_map {"discover" parse_discover_file})
+(def parser_map {
+                 "discover" map_discover
+                 "sunset"   map_sunset
+                 })
 
 (defn parse_bank_file
   "parses a bank file based on the passsed account type"
   [account filePath]
-  ((get parser_map account) filePath)
+  (let [mapper (get parser_map account)]
+    (map mapper (rest (load-bank-trx filePath)))
+    )
   )
