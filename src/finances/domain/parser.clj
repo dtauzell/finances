@@ -50,7 +50,7 @@
     (parseDiscoverDate date)
     (clean_string desc)
     (str_to_amount amount -1)
-    nil
+    category
     nil
     )
   )
@@ -67,20 +67,44 @@
     checkNum)
   )
 
-(defn parse_discover_file
-  "reads a discover csv file and returns a sequence of Transaction records"
-  [filePath]
-  (map map_discover (rest (load-bank-trx filePath))))
+(defn- map_usaa
+  "maps a row from a USAA csv download"
+  [[extra1, extra2, date, extra3, desc, category, amount]]
+  (Transaction.
+    "usaa"
+    (parseDiscoverDate date)
+    (clean_string desc)
+    (str_to_amount amount 1)
+    category,
+    nil)
+  )
+
+
+(defn- map_target
+  "maps a row from a Target csv download"
+  [[date, postedDate, desc, amount, category]]
+  (Transaction.
+    "target"
+    (parseDiscoverDate date)
+    (clean_string desc)
+    (str_to_amount amount 1)
+    category,
+    nil)
+  )
+
 
 (def parser_map {
-                 "discover" map_discover
-                 "sunset"   map_sunset
+                 "discover" [rest map_discover]
+                 "sunset"   [rest map_sunset]
+                 "usaa"     [identity map_usaa]
+                 "target"   [identity map_target]
                  })
+
 
 (defn parse_bank_file
   "parses a bank file based on the passsed account type"
   [account filePath]
   (let [mapper (get parser_map account)]
-    (map mapper (rest (load-bank-trx filePath)))
+    (map (get mapper 1) ((get mapper 0) (load-bank-trx filePath)))
     )
   )
