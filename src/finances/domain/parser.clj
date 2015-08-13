@@ -30,8 +30,8 @@
   [s multiplier]
   (* multiplier
      (if (clojure.string/blank? s)
-       0
-       (Float/parseFloat s)))
+       (bigdec 0)
+       (bigdec s)))
   )
 
 (defn- parseDiscoverDate
