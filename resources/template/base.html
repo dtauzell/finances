@@ -3,9 +3,12 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Finances</title>
+    {% block head %}
+    {% endblock %}
+
 </head>
 <body>
-<a href="/upload">Upload</a>
+<a href="/">Overview</a> <a href="/upload">Upload</a>
 {% block content %}
 {% endblock %}
 </body>

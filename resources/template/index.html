@@ -1,6 +1,30 @@
 {% extends "template/base.html" %}
+{% block head %}
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.8/css/dataTables.foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.0.0/css/buttons.foundation.min.css"/>
+<link rel="stylesheet" type="text/css"
+      href="https://cdn.datatables.net/fixedheader/3.0.0/css/fixedHeader.foundation.min.css"/>
+<link rel="stylesheet" type="text/css"
+      href="https://cdn.datatables.net/keytable/2.0.0/css/keyTable.foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.0.0/css/select.foundation.min.css"/>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/js/foundation.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.8/js/dataTables.foundation.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.0/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.0.0/js/buttons.foundation.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/fixedheader/3.0.0/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.0.0/js/dataTables.keyTable.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.0.0/js/dataTables.select.min.js"></script>
+
+{% endblock %}
 {% block content %}
-<table>
+<table id="transactions">
     <thead>
     <tr>
         <th>Account</th>
@@ -22,4 +46,15 @@
     {% endfor %}
     </tbody>
 </table>
+<script>
+    $(document).ready(function(){
+    $('#transactions').DataTable({
+        "paging": false,
+        "order": [[ 1, "desc" ]],
+        fixedHeader: true,
+        keys: true
+    });
+});
+
+</script>
 {% endblock %}
