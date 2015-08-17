@@ -4,7 +4,7 @@
             [clojure.java.io :as io]
             [clj-time.core :as t]
             [clj-time.format :as f])
-  (:import (finances.trx.types Transaction)))
+  (:import (java.util UUID)))
 
 (def disoverDateFormat (f/formatter "MM/dd/yyyy"))
 
@@ -45,51 +45,51 @@
 (defn- map_discover
   "maps a row from discover card csv download"
   [[date, postDate, desc, amount, category]]
-  (Transaction.
-    "discover"
-    (parseDiscoverDate date)
-    (clean_string desc)
-    (str_to_amount amount -1)
-    category
-    nil
+  (hash-map
+    :account "discover"
+    :date (parseDiscoverDate date)
+    :desc (clean_string desc)
+    :amount (str_to_amount amount -1)
+    :category category
+    :checkNum nil
     )
   )
 
 (defn- map_sunset
   "maps a row from a sunset csv download"
   [[accountNum, checkNum, debt, payment, balance, date, desc, extra2]]
-  (Transaction.
-    "sunset"
-    (parseDiscoverDate date)
-    (clean_string desc)
-    (if (clojure.string/blank? payment) (str_to_amount debt -1) (str_to_amount payment 1))
-    nil,
-    checkNum)
+  (hash-map
+    :account "sunset"
+    :date (parseDiscoverDate date)
+    :desc (clean_string desc)
+    :amount (if (clojure.string/blank? payment) (str_to_amount debt -1) (str_to_amount payment 1))
+    :category nil,
+    :checkNum checkNum)
   )
 
 (defn- map_usaa
   "maps a row from a USAA csv download"
   [[extra1, extra2, date, extra3, desc, category, amount]]
-  (Transaction.
-    "usaa"
-    (parseDiscoverDate date)
-    (clean_string desc)
-    (str_to_amount amount 1)
-    category,
-    nil)
+  (hash-map
+    :account "usaa"
+    :date (parseDiscoverDate date)
+    :desc (clean_string desc)
+    :amount (str_to_amount amount 1)
+    :category category,
+    :checkNum nil)
   )
 
 
 (defn- map_target
   "maps a row from a Target csv download"
   [[date, postedDate, desc, amount, category]]
-  (Transaction.
-    "target"
-    (parseDiscoverDate date)
-    (clean_string desc)
-    (str_to_amount amount 1)
-    category,
-    nil)
+  (hash-map
+    :account "target"
+    :date (parseDiscoverDate date)
+    :desc (clean_string desc)
+    :amount (str_to_amount amount 1)
+    :category category,
+    :checkNum nil)
   )
 
 
@@ -101,10 +101,22 @@
                  })
 
 
+(defn- addId
+  "Add a GUID as the id to a map as the :id field"
+  [map]
+  (assoc map :id (str (UUID/randomUUID)))
+  )
+
 (defn parse_bank_file
   "parses a bank file based on the passsed account type"
   [account filePath]
-  (let [mapper (get parser_map account)]
-    (map (get mapper 1) ((get mapper 0) (load-bank-trx filePath)))
+  (let [
+        mapper (get parser_map account)
+        skipFunc (get mapper 0)
+        parseFunc (get mapper 1)
+
+        ]
+    (map addId (map parseFunc (skipFunc (load-bank-trx filePath)))
+         )
     )
   )

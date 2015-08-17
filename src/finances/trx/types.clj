@@ -1,6 +1,9 @@
 (ns finances.trx.types)
 
-(defrecord Transaction [account date desc amount category checkNum])
+
+(comment
+  "just use records for now ... "
+  (defrecord Transaction [account date desc amount category checkNum]))
 
 (defn compareByDate
   "Compare two transactions by date"

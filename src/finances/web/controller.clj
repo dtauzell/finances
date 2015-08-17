@@ -6,7 +6,7 @@
             [finances.domain.parser :as parser]
             [clojure.java.io :as io]
             [clojure.data.csv :as csv])
-  (:import [java.io File FileInputStream FileOutputStream]))
+  )
 (use 'selmer.parser)
 
 (selmer.parser/add-tag! :csrf-field (fn [_ _] (anti-forgery-field)))

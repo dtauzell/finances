@@ -2,7 +2,7 @@
   (:require [finances.trx.types :as types]
             [clojure.data.csv :as csv]
             [clojure.java.io :as io])
-  (:import (finances.trx.types Transaction)))
+  )
 
 (def ^:private dbFile "/Users/LisaTauzell/Dropbox/documents/Transactions/2015/archived/discover_201504_201506.csv")
 
